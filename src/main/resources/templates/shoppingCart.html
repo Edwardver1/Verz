@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<title>VERZ</title>
+
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+<link href="/css/non-responsive.css" rel="stylesheet" />
+
+<!-- data table -->
+<link th:href="@{/css/jquery.dataTables.min.css}" rel="stylesheet" />
+<link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet" />
+
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="/css/shoppingCart.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+	<div th:replace="common/header :: navbar" />
+
+	<div class="container">
+		<div class="row" style="margin-bottom: -100px;">
+			<div class="col-xs-8">
+			<a class="btn btn-default" id="back" th:href="@{/carShelf}" role="button">CONTINUE SHOPPING</a>
+					<h2 class="section-headline">
+						<span
+							th:text="${user}? ${#strings.toUpperCase(user.username)} : 'All Books'"></span>
+					</h2>
+			</div>
+			<hr id="line" />
+		</div>
+		
+
+		<div class="row" style="margin-top: 100px;">
+			<div class="col-xs-12">
+				<div class="row">
+					<br />
+					<div th:if="${emptyCart}" class="alert alert-warning">Oops,
+						your cart is empty. See if you can find what you like in the
+						car shelf and add them to cart.</div>
+
+					<br /> <br />
+					<div class="row">
+						<div class="col-xs-8 ">
+							<h4 style="margin-left:70px;">Cars</h4>
+						</div>
+						<div class="col-xs-2">
+							<h4>Price</h4>
+						</div>
+						<div class="col-xs-2">
+							<h4>Days</h4>
+						</div>
+					</div>
+
+					<!--**************** display products in cart ****************-->
+
+					<div class="row" th:each="cartItem : ${cartItemList}">
+						<form th:action="@{/shoppingCart/updateCartItem}" method="post">
+							<hr />
+							<div class="col-xs-2">
+								<a th:href="@{carDetail(id=${cartItem.car.id})}"> <img
+									style="width:70px;"
+									class="img-responsive shelf-book center-block"
+									th:src="@{/image/car/}+
+								${cartItem.car.id}+'.png'" />
+								</a>
+							</div>
+							<div class="col-xs-6">
+								<div style="margin-left:50px;">
+								<a th:href="@{/carDetail?id=}+${cartItem.car.id}" style="font-size:20px;">
+														<span th:text="${cartItem.car.make}"></span>
+														<span th:text="${cartItem.car.model}"></span>
+								</a>
+								<br/>
+								<a th:href="@{/shoppingCart/removeItem?id=}+${cartItem.id}">delete</a>
+								</div>
+							</div>
+
+							<div class="col-xs-2">
+								<h5 style="color: #db3208; font-size: large;">
+									$<span th:text="${#numbers.formatDecimal(cartItem.car.price, 0 , 'COMMA', 0, 'POINT')}"
+										></span>
+								</h5>
+							</div>
+
+							<div class="col-xs-2">
+								<input hidden="hidden" name="id" th:value="${cartItem.id}" /> <input
+									th:id="${cartItem.id}" th:name="days"  class="form-control cartItemDay" th:value="${cartItem.days}" />
+								<button style="display: none;"
+									th:id="'update-item-'+${cartItem.id}" type="submit"
+									class="btn btn-warning btn-xs">Update</button>
+							</div>
+						</form>
+					</div>
+
+					<div class="row">
+						<hr />
+						<div class="col-xs-12 text-right">
+							<h4><strong style="font-size: large;">Total Price (<span
+								th:text="${#lists.size(cartItemList)}"></span> items):
+								</strong> <span style="color: #db3208; font-szie: large;">$<span
+								th:text="${#numbers.formatDecimal(shoppingCart.grandTotal, 0 , 'COMMA', 0, 'POINT')}"></span></span>
+							</h4>	
+							<a class="btn btn-primary" th:href="@{/checkout(id=${shoppingCart.id})}">Check Out</a>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end of container -->
+<div th:replace="common/header :: footer"/>
+<div th:replace="common/header :: body-bottom-scripts" />
+<script th:src="@{/js/shoppingCart.js}"></script>
+</body>
+</html>

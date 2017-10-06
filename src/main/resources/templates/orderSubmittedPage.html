@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<title>VERZ</title>
+
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+<link href="/css/non-responsive.css" rel="stylesheet" />
+
+<!-- data table -->
+<link th:href="@{/css/jquery.dataTables.min.css}" rel="stylesheet" />
+<link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" />
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="/css/submitted.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+	<div th:replace="common/header :: navbar" />
+
+	<div class="container">
+		<div class="row" >
+			<div class="col-xs-8">
+				<h2 class="section-headline">
+					<span>Confirmation</span>
+				</h2>
+			</div>
+			<hr id="line"   />
+		</div>
+		
+
+		<div class="row" style="margin-top: 100px;">
+			<div class="col-xs-12">
+				<div class="alert alert-success">
+					<h3>
+						<i class="fa fa-check" aria-hidden="true"
+							style="color: limegreen;"></i> Thank you, your order has been
+						placed.
+					</h3>
+					
+				</div>
+
+				<h3>List of Items</h3>
+				<div class="row" th:each="cartItem : ${cartItemList}">
+					<hr />
+					<div class="col-xs-2"></div>
+					<div class="col-xs-2">
+
+						<a th:href="@{/carDetail(id=${cartItem.car.id})}"> <img
+							class="img-responsive shelf-book"
+							th:src="@{/image/car/}+${cartItem.car.id}+'.png'"
+							style="width: 70px;" />
+						</a>
+					</div>
+					<div class="col-xs-6">
+						<div style="margin-left: 50px;">
+							<a th:href="@{/carDetail?id=}+${cartItem.car.engine.id}" style="font-size:20px;">
+								<span th:text="${cartItem.car.make}"></span>
+								<span th:text="${cartItem.car.model}"></span>
+							</a>
+						</div>
+					</div>
+
+					<div class="col-xs-2">
+						<h5 style="color: #db3208; font-size: large;">
+							$<span th:text="${#numbers.formatDecimal(cartItem.car.price, 0 , 'COMMA', 0, 'POINT')}"
+								></span>
+						</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end of container -->
+<div th:replace="common/header :: footer"/>
+
+	<div th:replace="common/header :: body-bottom-scripts" />
+</body>
+</html>

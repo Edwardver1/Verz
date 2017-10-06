@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<title>VERZ</title>
+
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+<link href="/css/non-responsive.css" rel="stylesheet" />
+
+<!-- data table -->
+<link th:href="@{/css/jquery.dataTables.min.css}" rel="stylesheet" />
+<link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet" />
+
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="/css/carDetail.css" rel="stylesheet" />
+
+
+</head>
+
+
+<body>
+<div th:replace="common/header :: navbar"/>
+
+<div class="container">
+    <div class="row" >
+        <div class="col-xs-8">
+         <a class="btn btn-default" id="back" th:href="@{/carShelf}" role="button">BACK TO CAR LIST</a>
+                <h2 class="section-headline">
+                    <span th:text="${user}? ${#strings.toUpperCase(user.username)} : 'All Books'"></span>
+                </h2>
+        </div>
+         <hr id="line"/>
+    </div>
+ 
+
+   
+    <form th:action="@{/shoppingCart/addItem}" method="post">
+    	<input hidden="hidden" th:field="*{car.engine.id}" />
+    	<div class="row" style="margin-top: 100px;">
+
+    		<div class="col-xs-3">
+    			<img class="img-responsive shelf-book" th:src="@{/image/car/}+${car.engine.id}+'.png'" />
+    		</div>
+    		
+    		<div class="col-xs-9">
+    			<h3><span th:if="${addCarSuccess}" style="color: forestgreen"><i class="fa fa-check" aria-hidden="true" style="color: forestgreen"></i>Added to cart.</span></h3>
+    			<h3 th:text="${car.make} + ' ' + ${car.model}">Car Title</h3>
+    			<div class="row">
+    				<div class="col-xs-5">
+    					<h5><strong>Model: </strong><span th:text="${car.make} + ' ' + ${car.model}"></span></h5>
+    					<p><strong>Color: </strong><span th:text="${car.color}"></span></p>
+    					<p><strong>Production Year: </strong><span th:text="${car.year}"></span></p>
+    					<p><strong>Cubic Capacity: </strong><span th:text="${car.engine.displacement}"></span></p>
+    					<p><strong>Power: </strong><span th:text="${car.engine.power}"></span></p>
+    					<p><strong>Fuel: </strong><span th:text="${car.engine.fuel}"></span></p>
+    	
+    				</div>
+    				
+    				<div class="col-xs-7">
+    					<div class="panel panel-default" style="border-width: 5px; margin-top: 20px;">
+    						<div class="panel-body">
+    							<div class="row">
+    								<div class="col-xs-6">
+    									<h4>Price: <span style="color:#db3208;">$<span th:text="${#numbers.formatDecimal(car.price, 0 , 'COMMA', 0, 'POINT')}"></span></span></h4>
+    									<span>Days: </span>
+    									<select name="days">
+    										<option th:each="days : ${daysList}" th:value="${days}" th:text="${days}">
+    										</option>
+    									</select>
+    								</div>
+    							 	<div class="col-xs-6">
+    									<button type="submit" class="btn btn-warning" style="color:black;border:1px solid black; padding: 10px 40px 10px 40px;">Add to Cart</button>
+    								</div> 
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    			
+    			<hr/>
+    			<p id="features" th:utext="${car.features}"></p>
+    		</div>
+    	</div>
+    </form>
+</div>
+<!-- end of container -->
+<div th:replace="common/header :: footer"/>
+
+<div th:replace="common/header :: body-bottom-scripts"/>
+</body>
+</html>

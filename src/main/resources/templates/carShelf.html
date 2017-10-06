@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<title>VERZ</title>
+
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+<link href="/css/non-responsive.css" rel="stylesheet" />
+
+<!-- data table -->
+<link th:href="@{/css/jquery.dataTables.min.css}" rel="stylesheet" />
+<link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet" />
+
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="/css/carShelf.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+	<div th:replace="common/header :: navbar" ></div>
+
+	<div class="container">
+		<div class="row" >
+		
+		
+			<div class="col-xs-8">
+				<h2 class="section-headline">
+					<span th:text="${user}? ${#strings.toUpperCase(user.username)} : 'All Cars'"></span>
+				</h2>
+			</div>
+			
+		</div>
+		<hr id="line"/>
+		<div class="row" style="margin-top: 60px;">
+			<div class="col-xs-3">
+				<h3><label for="category">Category</label></h3>
+				<div class="list-group" id="category">
+					<a th:href="@{/carShelf(category='all')}" th:classappend="${activeAll}? 'active'" class="list-group-item">All</a>
+					<a th:href="@{/searchByCategory(category='Saloon')}" th:classappend="${activeSaloon}? 'active'" class="list-group-item">Saloon</a>
+					<a th:href="@{/searchByCategory(category='SUV')}" th:classappend="${activeFiction}? 'active'" class="list-group-item">SUV</a>
+					
+				</div>
+			</div>
+			
+			<div class="col-xs-9">
+				<div th:if="${emptyList}">
+					<h5 style="font-style: italic;">Oops, no result is found. Try
+						something else or try again later.</h5>
+				</div>
+				
+				 <table border="0" id="bookList">
+					<thead>
+						<tr>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="book-item" data-th-each="car : ${carList}" >
+							<td>
+								<div th:if="${car != null}">
+									<div class="row" style="margin-bottom: 50px;">
+										<div class="col-xs-3">
+											<a th:href="@{/carDetail?id=}+${car.id}"><img 
+												class="img-responsive shelf-book"
+												th:src="@{/image/car/}+${car.id}+'.png'" /></a>
+										</div>
+										<div class="col-xs-9" >
+											<a class="carLink" th:href="@{/carDetail?id=}+${car.id}">
+												<span th:text="${car.make}"></span>
+												<span th:text="${car.model}"></span>
+											</a>
+											
+											<p id="carColor">Color: <span th:text="${car.color}"></span></p>
+											<p>Production Year: <span th:text="${car.year}"></span></p>
+											<p>Cubic Capacity: <span th:text="${car.engine.displacement}"></span> ccm</p>
+											<p>Power: <span th:text="${car.engine.power}"></span> kkw</p>
+											<p>Fuel: <span th:text="${car.engine.fuel}"></span></p>
+
+											<a id="priceLink" th:href="@{/carDetail?id=}+${car.engine.id}">
+												<span style="font-size: x-large; color: #db3208;">$
+													<span th:text="${#numbers.formatDecimal(car.price, 0 , 'COMMA', 0, 'POINT')}"></span>
+												</span>
+											</a>
+
+				
+											<!-- <p th:utext="${#strings.abbreviate(book.description, 1000)}"></p> -->
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>		
+ 			</div>
+		</div>
+	</div>
+	<!-- end of container -->
+<div th:replace="common/header :: footer"/>
+
+	<div th:replace="common/header :: body-bottom-scripts" />
+	
+	<script>
+		$(document).ready(function() {
+			$('#bookList').DataTable({
+				"lengthMenu":[[5,10,15,20,-1],[5,10,15,20,"All"]],
+				"ordering":false,
+				stateSave:true
+			});
+			
+			$("#bookList").on('page.dt', function() {
+				$('html, body').animate({
+					scrollTop: $('#bookList').offset().top
+				}, 200);
+			});
+		});
+	</script>
+</body>
+</html>

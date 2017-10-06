@@ -1,0 +1,80 @@
+c<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+<link href="/css/non-responsive.css" rel="stylesheet" />
+
+<link href="/css/font-awesome.min.css" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="/css/style.css" rel="stylesheet" />
+
+<style>
+	table {
+	border-collapse: collapse;
+	}
+	
+	table, th, td {
+	border:1px solid black;}
+</style>
+</head>
+<body>
+<p>Dear <span th:text="${user.firstName}"></span>,</p>
+<p>Thank you for renting with us!<i class="fa fa-smile-o" aria-hidden="true"></i></p>
+<p>We hope you'll have a good time with our service!</p>
+<p>Your order number is: <strong>#<span th:text="${order.id}"></span></strong> placed on <span th:text="${order.orderDate}"></span></p> 
+<p>Please find summary below.</p>
+
+<h3>Shipping Address</h3>
+<p>Your car will be delivered to this address:</p>
+<p>
+	<span th:text="${order.shippingAddress.addressCity} + ',' + ${order.shippingAddress.addressStreet} 
+					+ ' on ' + ${#dates.format(order.shippingAddress.deliverDate, 'yyyy MMM dd HH:mm')}"></span> 
+</p>
+<p>Recipient: <span th:text="${order.shippingAddress.recipientName}"></span> </p>
+
+
+<h3>Payment</h3>
+
+<p>You paid by  <strong th:if="${!order.payment.holderName.isEmpty() and !order.payment.cardNumber.isEmpty()}" th:text="Card"></strong>
+			   <strong th:if="${!order.payment.paypalEmail.isEmpty()  and !order.payment.paypalPassword.isEmpty()}" th:text="Paypal"></strong> 
+			   
+</p>
+
+<h3>Order Summary</h3>
+<table>
+<thead>
+	<tr>
+		<td><strong>Car</strong></td>
+		<td class="text-center"><strong>Price pd</strong></td>
+		<td class="text-center"><strong>Days</strong></td>
+		<td class="text-right"><strong>Total</strong></td>
+	</tr>
+</thead>
+<tbody>
+	<tr th:each="cartItem : ${cartItemList}">
+		<td><span data-th-text="${cartItem.car.make}+ ' ' + ${cartItem.car.model}"></span></td>
+		<td class="text-center" data-th-text="${cartItem.car.price}"></td>
+		<td class="text-center" data-th-text="${cartItem.days}"></td>
+		<td class="text-right" data-th-text="${#numbers.formatDecimal(cartItem.subtotal, 0 , 'COMMA', 0, 'POINT')}"></td>
+	</tr>
+	<tr>
+		<td class="emptyrow"><i class="fa fa-barcode iconbig"></i></td>
+		<td class="emptyrow"></td>
+		<td class="emptyrow text-center"><strong>Total</strong></td>
+		<td th:with="total=${order.orderTotal}"
+            data-th-text="${#numbers.formatDecimal(total, 0 , 'COMMA', 0, 'POINT')}"
+            class="emptyrow text-right">
+        </td>
+	</tr>
+</tbody>
+</table> 
+
+<br/>
+<p>Best,</p>
+<p>VERZ</p>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+
+<body>
+	<div th:fragment="navbar">
+		<!-- Static navbar -->
+		<nav class="navbar navbar-default navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" th:href="@{/}">VERZ</a>
+				</div>
+				<div id="navbar">
+					<ul class="nav navbar-nav navbar-left">
+							<li><a th:href="@{/carShelf}">Cars</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a sec:authorize="isAuthenticated()" th:href="@{/shoppingCart/cart}">SHOPPING CART</a></li>
+					 	<li><a sec:authorize="isAnonymous()" th:href="@{/login}" >SIGN IN</a></li>
+						<!-- <li><a sec:authorize="isAuthenticated()"
+							>MY ACCOUNT</a></li> -->
+						<li><a sec:authorize="isAuthenticated()" th:href="@{/logout}" >SIGN OUT</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+			<!--/.container-fluid -->
+		</nav>
+	</div>
+
+	<div class="footer-bottom" th:fragment="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="copyright">
+						<p>© 2017,Verz, All rights reserved.</p>
+					</div>
+				</div>
+				<div class="col-md-6 ">
+					<div class="about">
+						<p> 
+							  <a href="#">About us</a> | <a href="#">Contact</a>  
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:fragment="body-bottom-scripts">
+		<script th:src="@{/js/jquery.min.js}"></script>
+		<script th:src="@{/js/bootstrap.min.js}"></script>
+		<!-- data table -->
+		<script th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script th:src="@{/js/dataTables.bootstrap.min.js}"></script>
+		<!-- date picker -->
+		<script th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+	</div>
+</body>
+</html>
